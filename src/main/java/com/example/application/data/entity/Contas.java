@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
 public class Contas extends AbstractEntity {
 
     @NotEmpty
-    private String banco = "";
+    private String conta = "";
 
     @NotEmpty
     private float saldo;
@@ -30,20 +30,20 @@ public class Contas extends AbstractEntity {
         this.status = status;
     }
 
-	public String getBanco() {
-		return banco;
-	}
+    public String getConta() {
+        return conta;
+    }
 
-	public void setBanco(String banco) {
-		this.banco = banco;
-	}
+    public void setConta(String conta) {
+        this.conta = conta;
+    }
 
-	public float getSaldo() {
-		return saldo;
-	}
+    public float getSaldo() {
+        return saldo;
+    }
 
-	public void setSaldo(float saldo) {
-		this.saldo = saldo;
-	}
+    public void setSaldo(float saldo) {
+        this.saldo = saldo;
+    }
 }
 
