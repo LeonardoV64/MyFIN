@@ -1,6 +1,7 @@
 package com.example.application.views.list;
 
 import com.example.application.data.entity.Contas;
+import com.example.application.data.service.CrmService;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
@@ -19,9 +20,11 @@ public class ListView extends VerticalLayout {
     Grid<Contas> grid = new Grid<>(Contas.class);
     TextField filterText = new TextField();
     ContaForm form;
+    private CrmService service;
 
 
-    public ListView() {
+    public ListView(CrmService service) {
+        this.service = service;
         addClassName("list-view");
         setSizeFull();
 
@@ -32,6 +35,13 @@ public class ListView extends VerticalLayout {
                 getToolbar(),
                 getContent()
         );
+
+        updateList();
+
+    }
+
+    private void updateList() {
+        grid.setItems(service.buscaTodasContas(filterText.getValue()));
     }
 
     private Component getContent() {
@@ -45,7 +55,7 @@ public class ListView extends VerticalLayout {
     }
 
     private void configureForm() {
-        form = new ContaForm(Collections.emptyList());
+        form = new ContaForm(service.buscaTodosStatus());
         form.setWidth("25em");
     }
 
@@ -57,12 +67,13 @@ public class ListView extends VerticalLayout {
         grid.getColumns().forEach(col -> col.setAutoWidth(true));
     }
 
-    private HorizontalLayout getToolbar() {
-        filterText.setPlaceholder("Procurar por nome...");
+    private Component getToolbar() {
+        filterText.setPlaceholder("Procurar por conta...");
         filterText.setClearButtonVisible(true);
         filterText.setValueChangeMode(ValueChangeMode.LAZY);
+        filterText.addValueChangeListener(e -> updateList());
 
-        Button addContaButton = new Button("Adicionar Conta");
+        Button addContaButton = new Button("Criar Conta");
 
         HorizontalLayout toolbar = new HorizontalLayout(filterText, addContaButton);
         toolbar.addClassName("toolbar");

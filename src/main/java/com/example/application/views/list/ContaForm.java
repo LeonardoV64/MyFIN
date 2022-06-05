@@ -18,8 +18,8 @@ public class ContaForm extends FormLayout {
     BigDecimalField saldo = new BigDecimalField("Saldo");
     ComboBox<Status> status = new ComboBox<Status>("Status");
 
-    Button criar = new Button("Criar conta");
-    Button deletar = new Button("Deletar conta");
+    Button criar = new Button("Criar");
+    Button deletar = new Button("Deletar");
     Button cancelar = new Button("Cancelar");
 
     public ContaForm(List<Status> statuses){
