@@ -8,15 +8,18 @@ import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.flow.component.textfield.BigDecimalField;
+import com.vaadin.flow.component.textfield.IntegerField;
+import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextField;
 
 import java.util.List;
 
 public class ContaForm extends FormLayout {
     TextField conta = new TextField("Conta");
-    BigDecimalField saldo = new BigDecimalField("Saldo");
+    NumberField saldo = new NumberField("Saldo");
     ComboBox<Status> status = new ComboBox<Status>("Status");
+
+
 
     Button criar = new Button("Criar");
     Button deletar = new Button("Deletar");

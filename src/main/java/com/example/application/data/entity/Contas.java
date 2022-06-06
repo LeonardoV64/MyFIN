@@ -14,8 +14,7 @@ public class Contas extends AbstractEntity {
     @NotEmpty
     private String conta = "";
 
-    @NotEmpty
-    private float saldo;
+    private int saldo;
 
 
     @NotNull
@@ -38,11 +37,11 @@ public class Contas extends AbstractEntity {
         this.conta = conta;
     }
 
-    public float getSaldo() {
+    public int getSaldo() {
         return saldo;
     }
 
-    public void setSaldo(float saldo) {
+    public void setSaldo(int saldo) {
         this.saldo = saldo;
     }
 }
