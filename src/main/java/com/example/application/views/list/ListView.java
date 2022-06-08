@@ -22,7 +22,7 @@ import java.util.Collections;
 public class ListView extends VerticalLayout {
     Grid<Contas> grid = new Grid<>(Contas.class);
     TextField filterText = new TextField();
-    ContasForm form;
+    ContaForm form;
     private CrmService service;
 
 
@@ -42,11 +42,11 @@ public class ListView extends VerticalLayout {
         updateList(); 	
         
         
-        closeEditor();
+        fecharEditor();
 
     }
     
-    private void closeEditor() {
+    private void fecharEditor() {
     	
     	form.setConta(null);
     	form.setVisible(false);
@@ -68,27 +68,27 @@ public class ListView extends VerticalLayout {
     }
 
     private void configureForm() {
-        form = new ContasForm(service.buscaTodosStatus());
+        form = new ContaForm(service.buscaTodosStatus());
         ((HasSize) form).setWidth("25em");
-        /*
-        form.addListener(ContasForm.SaveEvent.class, this::saveConta);
-        form.addListener(ContasForm.DeleteEvent.class, this::deleteConta);
-        form.addListener(ContasForm.CloseEvent.class, e -> closeEditor());
-        */
+
+        form.addListener(ContaForm.SalvarEvento.class, this::salvarConta);
+        form.addListener(ContaForm.DeletarEvento.class, this::deletarConta);
+        form.addListener(ContaForm.FecharEvento.class, e -> fecharEditor());
+
     }
-    /*
-    private void saveConta(ContasForm.SaveEvent event) {
-    	service.salvarConta(event.getConta());
+
+    private void salvarConta(ContaForm.SalvarEvento event) {
+    	service.salvarConta(event.getContas());
     	updateList();
-    	closeEditor();
+    	fecharEditor();
     }
     
-    private void deleteConta(ContasForm.DeleteEvent event) {
-    	service.deletarConta(event.getConta());
+    private void deletarConta(ContaForm.DeletarEvento event) {
+    	service.deletarConta(event.getContas());
     	updateList();
-    	closeEditor();
+    	fecharEditor();
     }
-    */
+
 
     private void configureGrid() {
         grid.addClassNames("contas-grid");
@@ -99,13 +99,13 @@ public class ListView extends VerticalLayout {
         
         
         
-        grid.asSingleSelect().addValueChangeListener(e -> editConta(e.getValue()));
+        grid.asSingleSelect().addValueChangeListener(e -> editarConta(e.getValue()));
     }
  
     
-    private void editConta(Contas conta) {
+    private void editarConta(Contas conta) {
     	if(conta == null) {
-    		closeEditor();
+    		fecharEditor();
     	}else {
     		form.setConta(conta);
     		form.setVisible(true);
@@ -122,15 +122,15 @@ public class ListView extends VerticalLayout {
         filterText.addValueChangeListener(e -> updateList());
 
         Button addContaButton = new Button("Criar Conta");
-        addContaButton.addClickListener(e -> addConta());
+        addContaButton.addClickListener(e -> adicionarConta());
 
         HorizontalLayout toolbar = new HorizontalLayout(filterText, addContaButton);
         toolbar.addClassName("toolbar");
         return toolbar;
     }
 
-	private void addConta() {
+	private void adicionarConta() {
 		grid.asSingleSelect().clear();
-		editConta(new Contas());
+		editarConta(new Contas());
 	}
 }
