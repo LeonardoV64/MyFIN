@@ -45,4 +45,3 @@ public class Contas extends AbstractEntity {
         this.saldo = saldo;
     }
 }
-
