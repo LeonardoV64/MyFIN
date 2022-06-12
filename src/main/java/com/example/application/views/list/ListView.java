@@ -29,7 +29,10 @@ public class ListView extends VerticalLayout {
     Grid<Contas> grid = new Grid<>(Contas.class);
     TextField filterText = new TextField();
     ContaForm form;
+<<<<<<< HEAD
     Chart chart;
+=======
+>>>>>>> 26da96d1339fcf738388b9b35ef94ac227251b2a
     private CrmService service;
     
 
@@ -142,6 +145,7 @@ public class ListView extends VerticalLayout {
 	private void adicionarConta() {
 		grid.asSingleSelect().clear();
 		editarConta(new Contas());
+<<<<<<< HEAD
 	}
 	
 	//Gráficos
@@ -169,5 +173,7 @@ public class ListView extends VerticalLayout {
 			});
 		chart.getConfiguration().setSeries(dataSeries);
 		return chart;
+=======
+>>>>>>> 26da96d1339fcf738388b9b35ef94ac227251b2a
 	}
 }
