@@ -6,10 +6,16 @@ import com.example.application.views.MainLayout;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasSize;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.charts.Chart;
+import com.vaadin.flow.component.charts.model.ChartType;
+import com.vaadin.flow.component.charts.model.DataSeries;
+import com.vaadin.flow.component.charts.model.DataSeriesItem;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.login.LoginI18n.Form;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
@@ -22,8 +28,10 @@ import java.util.Collections;
 public class ListView extends VerticalLayout {
     Grid<Contas> grid = new Grid<>(Contas.class);
     TextField filterText = new TextField();
-    ContasForm form;
+    ContaForm form;
+    Chart chart;
     private CrmService service;
+    
 
 
     public ListView(CrmService service) {
@@ -42,11 +50,11 @@ public class ListView extends VerticalLayout {
         updateList(); 	
         
         
-        closeEditor();
+        fecharEditor();
 
     }
     
-    private void closeEditor() {
+    private void fecharEditor() {
     	
     	form.setConta(null);
     	form.setVisible(false);
@@ -61,6 +69,7 @@ public class ListView extends VerticalLayout {
         HorizontalLayout conteudo = new HorizontalLayout(grid, form);
         conteudo.setFlexGrow(2, grid);
         conteudo.setFlexGrow(1, form);
+        //conteudo.setFlexGrow(1, chart);
         conteudo.addClassName("conteudo");
         conteudo.setSizeFull();
 
@@ -68,44 +77,45 @@ public class ListView extends VerticalLayout {
     }
 
     private void configureForm() {
-        form = new ContasForm(service.buscaTodosStatus());
+        form = new ContaForm(service.buscaTodosStatus());
         ((HasSize) form).setWidth("25em");
-        /*
-        form.addListener(ContasForm.SaveEvent.class, this::saveConta);
-        form.addListener(ContasForm.DeleteEvent.class, this::deleteConta);
-        form.addListener(ContasForm.CloseEvent.class, e -> closeEditor());
-        */
+
+        form.addListener(ContaForm.SalvarEvento.class, this::salvarConta);
+        form.addListener(ContaForm.DeletarEvento.class, this::deletarConta);
+        form.addListener(ContaForm.FecharEvento.class, e -> fecharEditor());
+
     }
-    /*
-    private void saveConta(ContasForm.SaveEvent event) {
-    	service.salvarConta(event.getConta());
+
+    private void salvarConta(ContaForm.SalvarEvento event) {
+    	service.salvarConta(event.getContas());
     	updateList();
-    	closeEditor();
+    	fecharEditor();
     }
     
-    private void deleteConta(ContasForm.DeleteEvent event) {
-    	service.deletarConta(event.getConta());
+    private void deletarConta(ContaForm.DeletarEvento event) {
+    	service.deletarConta(event.getContas());
     	updateList();
-    	closeEditor();
+    	fecharEditor();
     }
-    */
+
 
     private void configureGrid() {
         grid.addClassNames("contas-grid");
-        grid.setSizeFull();
+        //grid.setSizeFull();
+        grid.setAllRowsVisible(true);
         grid.setColumns("conta", "saldo");
         grid.addColumn(contact -> contact.getStatus().getName()).setHeader("Status");
         grid.getColumns().forEach(col -> col.setAutoWidth(true));
         
         
         
-        grid.asSingleSelect().addValueChangeListener(e -> editConta(e.getValue()));
+        grid.asSingleSelect().addValueChangeListener(e -> editarConta(e.getValue()));
     }
  
     
-    private void editConta(Contas conta) {
+    private void editarConta(Contas conta) {
     	if(conta == null) {
-    		closeEditor();
+    		fecharEditor();
     	}else {
     		form.setConta(conta);
     		form.setVisible(true);
@@ -122,15 +132,42 @@ public class ListView extends VerticalLayout {
         filterText.addValueChangeListener(e -> updateList());
 
         Button addContaButton = new Button("Criar Conta");
-        addContaButton.addClickListener(e -> addConta());
+        addContaButton.addClickListener(e -> adicionarConta());
 
         HorizontalLayout toolbar = new HorizontalLayout(filterText, addContaButton);
         toolbar.addClassName("toolbar");
         return toolbar;
     }
 
-	private void addConta() {
+	private void adicionarConta() {
 		grid.asSingleSelect().clear();
-		editConta(new Contas());
+		editarConta(new Contas());
+	}
+	
+	//Gráficos
+	
+	public void DashBoardView(CrmService service) {
+		this.service = service;
+		addClassName("dashboard-view");
+		setDefaultHorizontalComponentAlignment(Alignment.CENTER);
+		add(getContaStats(), getContasSaldoChart());
+	}
+	
+	private Component getContaStats() {
+		Span stats = new Span("Saldo Total " + service.somaSaldo());
+		stats.addClassNames("text-xl", "mt-m");
+		return stats;
+	}
+
+
+	private Component getContasSaldoChart() {
+		Chart chart = new Chart(ChartType.PIE);
+				
+		DataSeries dataSeries = new DataSeries();
+		service.buscaTodasContas(null).forEach(conta->{
+			dataSeries.add(new DataSeriesItem(conta.getConta(), conta.getSaldo()));
+			});
+		chart.getConfiguration().setSeries(dataSeries);
+		return chart;
 	}
 }

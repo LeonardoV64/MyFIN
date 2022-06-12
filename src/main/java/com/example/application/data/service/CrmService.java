@@ -36,6 +36,12 @@ public class CrmService {
     public void deletarConta(Contas conta){
         contasRepository.delete(conta);
     }
+    
+    public double somaSaldo() {
+    	
+    	return contasRepository.soma();
+    }
+    
 
     public void salvarConta(Contas conta){
         if(conta == null){

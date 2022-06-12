@@ -41,14 +41,14 @@ public class DataGenerator {
                     .saveAll(Stream.of("Ativa", "Inativa")
                             .map(Status::new).collect(Collectors.toList()));
 
-            logger.info("... gerando 50 Contas aleatorias...");
+            logger.info("... gerando 5 Contas aleatorias...");
             ExampleDataGenerator<Contas> contasGenerator = new ExampleDataGenerator<>(Contas.class,
                     LocalDateTime.now());
             contasGenerator.setData(Contas::setConta, DataType.COMPANY_NAME);
-            contasGenerator.setData(Contas::setSaldo, DataType.AMOUNT_OF_MONEY);
+            contasGenerator.setData(Contas::setSaldo, DataType.PRICE);
 
             Random r = new Random(seed);
-            List<Contas> conta = contasGenerator.create(50, seed).stream().peek(contact -> {
+            List<Contas> conta = contasGenerator.create(5, seed).stream().peek(contact -> {
                 contact.setStatus(statuses.get(r.nextInt(statuses.size())));
             }).collect(Collectors.toList());
 

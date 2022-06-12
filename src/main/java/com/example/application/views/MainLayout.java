@@ -1,10 +1,12 @@
 package com.example.application.views;
 
+import com.example.application.views.list.ContasPagarView;
 import com.example.application.views.list.DashBoardView;
+import com.example.application.views.list.DespesasView;
 import com.example.application.views.list.ListView;
+import com.example.application.views.list.ReceitasView;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
-import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -41,15 +43,23 @@ public class MainLayout extends AppLayout {
 		
 		RouterLink listView	=	new RouterLink("Contas Correntes", ListView.class);
 		
+		RouterLink DespesasView	=	new RouterLink("Despesas", DespesasView.class);
+		
+		RouterLink ContasPagarView	=	new RouterLink("Contas", ContasPagarView.class);
+		
+		RouterLink ReceitasView	=	new RouterLink("Receitas", ReceitasView.class);
+		
 		listView.setHighlightCondition(HighlightConditions.sameLocation());
 		
 		addToDrawer(new VerticalLayout(
 				listView,
-				new RouterLink("Dashboard", DashBoardView.class)
-				
+				new RouterLink("Dashboard", DashBoardView.class),
+				DespesasView,
+				ContasPagarView,
+				ReceitasView
 				));
 		
-		
 	}
+		
 
 }

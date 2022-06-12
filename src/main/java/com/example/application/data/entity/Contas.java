@@ -14,8 +14,7 @@ public class Contas extends AbstractEntity {
     @NotEmpty
     private String conta = "";
 
-    private int saldo;
-
+    private double saldo;
 
     @NotNull
     @ManyToOne
@@ -37,11 +36,11 @@ public class Contas extends AbstractEntity {
         this.conta = conta;
     }
 
-    public int getSaldo() {
+    public double getSaldo() {
         return saldo;
     }
 
-    public void setSaldo(int saldo) {
+    public void setSaldo(double saldo) {
         this.saldo = saldo;
     }
 }
