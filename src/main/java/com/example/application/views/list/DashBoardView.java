@@ -1,5 +1,7 @@
 package com.example.application.views.list;
 
+import javax.annotation.security.PermitAll;
+
 import com.example.application.data.service.CrmService;
 import com.example.application.views.MainLayout;
 import com.vaadin.flow.component.Component;
@@ -17,6 +19,7 @@ import com.vaadin.flow.router.Route;
 
 @Route(value = "dashboard", layout = MainLayout.class)
 @PageTitle("Gráficos")
+@PermitAll
 public class DashBoardView extends VerticalLayout{
 	private CrmService service;
 	

@@ -1,5 +1,7 @@
 package com.example.application.views.list;
 
+import javax.annotation.security.PermitAll;
+
 import com.example.application.data.service.CrmService;
 import com.example.application.views.MainLayout;
 import com.vaadin.flow.component.charts.model.style.GradientColor;
@@ -10,7 +12,8 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
 @Route(value = "receitas", layout = MainLayout.class)
-@PageTitle("Receitas")
+@PageTitle("Receitas Mensais")
+@PermitAll
 public class ReceitasView extends VerticalLayout {
 	private CrmService service;
 	
