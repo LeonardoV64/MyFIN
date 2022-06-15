@@ -1,6 +1,6 @@
 package br.edu.ifsp.gru.application.views.list;
 
-import br.edu.ifsp.gru.application.data.entity.Contas;
+import br.edu.ifsp.gru.application.data.entity.ContaBancaria;
 import br.edu.ifsp.gru.application.data.service.CrmService;
 import br.edu.ifsp.gru.application.views.MainLayout;
 import com.vaadin.flow.component.Component;
@@ -19,18 +19,18 @@ import com.vaadin.flow.router.Route;
 import javax.annotation.security.PermitAll;
 
 @Route(value = "", layout = MainLayout.class)
-@PageTitle("Contas Correntes")
+@PageTitle("Contas Bancárias")
 @PermitAll
-public class ListView extends VerticalLayout {
-    Grid<Contas> grid = new Grid<>(Contas.class);
+public class ContaBancariaView extends VerticalLayout {
+    Grid<ContaBancaria> grid = new Grid<>(ContaBancaria.class);
     TextField filterText = new TextField();
-    ContasForm form;
+    ContaBancariaForm form;
     Chart chart;
     private CrmService service;
     
 
-
-    public ListView(CrmService service) {
+    //Desenha a view de contas bancárias
+    public ContaBancariaView(CrmService service) {
         this.service = service;
         addClassName("list-view");
         setSizeFull();
@@ -62,10 +62,12 @@ public class ListView extends VerticalLayout {
     	removeClassName("editing");
     }
 
+    //Traz todos os valores de contas do usuário
     private void updateList() {
-        grid.setItems(service.buscaTodasContas(filterText.getValue()));
+        grid.setItems(service.buscaTodasContasBancarias(filterText.getValue()));
     }
 
+    //Retorna o conteúdo
     private Component getContent() {
         HorizontalLayout conteudo = new HorizontalLayout(grid, form);
         conteudo.setFlexGrow(2, grid);
@@ -76,43 +78,42 @@ public class ListView extends VerticalLayout {
         return conteudo;
     }
 
+    //Configura o formulário de criação/edição/exclusão de contas adicionando o "Listener" de botões
     private void configureForm() {
-        form = new ContasForm(service.buscaTodosStatus());
+        form = new ContaBancariaForm(service.buscaTodosTipos());
         ((HasSize) form).setWidth("25em");
 
-        form.addListener(ContasForm.SalvarEvento.class, this::salvarConta);
-        form.addListener(ContasForm.DeletarEvento.class, this::deletarConta);
-        form.addListener(ContasForm.FecharEvento.class, e -> fecharEditor());
+        form.addListener(ContaBancariaForm.SalvarEvento.class, this::salvarConta);
+        form.addListener(ContaBancariaForm.DeletarEvento.class, this::deletarConta);
+        form.addListener(ContaBancariaForm.FecharEvento.class, e -> fecharEditor());
 
     }
 
-    private void salvarConta(ContasForm.SalvarEvento event) {
+    private void salvarConta(ContaBancariaForm.SalvarEvento event) {
     	service.salvarConta(event.getContas());
     	updateList();
     	fecharEditor();
     }
     
-    private void deletarConta(ContasForm.DeletarEvento event) {
+    private void deletarConta(ContaBancariaForm.DeletarEvento event) {
     	service.deletarConta(event.getContas());
     	updateList();
     	fecharEditor();
     }
 
-
+    //Configura a tabela
     private void configureGrid() {
         grid.addClassNames("contas-grid");
         grid.setAllRowsVisible(true);
         grid.setColumns("conta", "saldo");
-        grid.addColumn(contact -> contact.getStatus().getName()).setHeader("Status");
+        grid.addColumn(contact -> contact.getStatus().getName()).setHeader("Tipo");
         grid.getColumns().forEach(col -> col.setAutoWidth(true));
-        
-        
         
         grid.asSingleSelect().addValueChangeListener(e -> editarConta(e.getValue()));
     }
  
     
-    private void editarConta(Contas conta) {
+    private void editarConta(ContaBancaria conta) {
     	if(conta == null) {
     		fecharEditor();
     	}else {
@@ -120,10 +121,9 @@ public class ListView extends VerticalLayout {
     		form.setVisible(true);
     		addClassName("editing");
     	}
-    	
     }
-    
 
+    //Configura a barra acima da tabela com os filtros de busca e botão de pesquisa
     private Component getToolbar() {
         filterText.setPlaceholder("Procurar por conta...");
         filterText.setClearButtonVisible(true);
@@ -140,12 +140,12 @@ public class ListView extends VerticalLayout {
 
 	private void adicionarConta() {
 		grid.asSingleSelect().clear();
-		editarConta(new Contas());
+		editarConta(new ContaBancaria());
 	}
 	
-	
+	//Retorna o valor total somando os saldos de todas as contas do usuário
 	private Component getContaStats() {
-		Span stats = new Span("Saldo Total " + service.somaSaldo());
+		Span stats = new Span("Saldo Total R$ " + service.somaSaldo());
 		stats.addClassNames("text-xl", "mt-m");
 		setDefaultHorizontalComponentAlignment(Alignment.CENTER);
 		return stats;

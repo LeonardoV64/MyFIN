@@ -1,7 +1,7 @@
 package br.edu.ifsp.gru.application.views.list;
 
-import br.edu.ifsp.gru.application.data.entity.Contas;
-import br.edu.ifsp.gru.application.data.entity.Tipo;
+import br.edu.ifsp.gru.application.data.entity.ContaBancaria;
+import br.edu.ifsp.gru.application.data.entity.TipoConta;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
@@ -20,27 +20,28 @@ import com.vaadin.flow.shared.Registration;
 
 import java.util.List;
 
-public class ContasForm extends FormLayout {
-    Binder<Contas> binder = new BeanValidationBinder<>(Contas.class);
+public class ContaBancariaForm extends FormLayout {
+    Binder<ContaBancaria> binder = new BeanValidationBinder<>(ContaBancaria.class);
 
-
+    //Criação dos campos do formulário de criação, exclusão e atualização
     TextField conta = new TextField("Conta");
     NumberField saldo = new NumberField("Saldo");
-    ComboBox<Tipo> status = new ComboBox<Tipo>("Status");
+    ComboBox<TipoConta> status = new ComboBox<TipoConta>("Tipo");
 
 
-
+    //Criação dos botões
     Button criar = new Button("Criar");
     Button deletar = new Button("Deletar");
     Button cancelar = new Button("Cancelar");
-    private Contas contas;
+    private ContaBancaria contaBancaria;
 
-    public ContasForm(List<Tipo> tipos){
+    //Cria o layout do formulário
+    public ContaBancariaForm(List<TipoConta> tipoContas){
         addClassName("contact-form");
         binder.bindInstanceFields(this);
 
-        status.setItems(tipos);
-        status.setItemLabelGenerator(Tipo::getName);
+        status.setItems(tipoContas);
+        status.setItemLabelGenerator(TipoConta::getName);
 
         add(
                 conta,
@@ -50,18 +51,19 @@ public class ContasForm extends FormLayout {
         );
     }
 
-    public void setConta(Contas contas){
-        this.contas = contas;
-        binder.readBean(contas);
+    public void setConta(ContaBancaria contaBancaria){
+        this.contaBancaria = contaBancaria;
+        binder.readBean(contaBancaria);
     }
 
+    //Molda os botões do formulário CRUD de contas
     private Component createButtonLayout(){
         criar.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         deletar.addThemeVariants(ButtonVariant.LUMO_ERROR);
         cancelar.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
 
         criar.addClickListener(event -> validarESalvar());
-        deletar.addClickListener(event -> fireEvent(new DeletarEvento(this, contas)));
+        deletar.addClickListener(event -> fireEvent(new DeletarEvento(this, contaBancaria)));
         cancelar.addClickListener(event -> fireEvent(new FecharEvento(this)));
 
         criar.addClickShortcut(Key.ENTER);
@@ -70,44 +72,45 @@ public class ContasForm extends FormLayout {
         return new HorizontalLayout(criar, deletar, cancelar);
     }
 
+    //Faz a validação e logo após salva a conta
     private void validarESalvar() {
         try{
-            binder.writeBean(contas);
-            fireEvent(new SalvarEvento(this, contas));
+            binder.writeBean(contaBancaria);
+            fireEvent(new SalvarEvento(this, contaBancaria));
         } catch (ValidationException e) {
             e.printStackTrace();
         }
     }
 
     // Eventos
-    public static abstract class ContaFormEvento extends ComponentEvent<ContasForm> {
-        private Contas contas;
+    public static abstract class ContaFormEvento extends ComponentEvent<ContaBancariaForm> {
+        private ContaBancaria contaBancaria;
 
-        protected ContaFormEvento(ContasForm source, Contas contas) {
+        protected ContaFormEvento(ContaBancariaForm source, ContaBancaria contaBancaria) {
             super(source, false);
-            this.contas = contas;
+            this.contaBancaria = contaBancaria;
         }
 
-        public Contas getContas() {
-            return contas;
+        public ContaBancaria getContas() {
+            return contaBancaria;
         }
     }
 
     public static class SalvarEvento extends ContaFormEvento {
-        SalvarEvento(ContasForm source, Contas contas) {
-            super(source, contas);
+        SalvarEvento(ContaBancariaForm source, ContaBancaria contaBancaria) {
+            super(source, contaBancaria);
         }
     }
 
     public static class DeletarEvento extends ContaFormEvento {
-        DeletarEvento(ContasForm source, Contas contas) {
-            super(source, contas);
+        DeletarEvento(ContaBancariaForm source, ContaBancaria contaBancaria) {
+            super(source, contaBancaria);
         }
 
     }
 
     public static class FecharEvento extends ContaFormEvento {
-        FecharEvento(ContasForm source) {
+        FecharEvento(ContaBancariaForm source) {
             super(source, null);
         }
     }

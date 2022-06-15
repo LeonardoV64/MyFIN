@@ -6,31 +6,31 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 @Entity
-public class Contas extends AbstractEntity {
+public class ContaBancaria extends AbstractEntity {
 
     @NotEmpty
-    private String conta = "";
+    private String contaBancaria = "";
 
     private double saldo;
 
     @NotNull
     @ManyToOne
-    private Tipo tipo;
+    private TipoConta tipoConta;
 
-    public Tipo getStatus() {
-        return tipo;
+    public TipoConta getStatus() {
+        return tipoConta;
     }
 
-    public void setStatus(Tipo tipo) {
-        this.tipo = tipo;
+    public void setStatus(TipoConta tipoConta) {
+        this.tipoConta = tipoConta;
     }
 
     public String getConta() {
-        return conta;
+        return contaBancaria;
     }
 
-    public void setConta(String conta) {
-        this.conta = conta;
+    public void setConta(String contaBancaria) {
+        this.contaBancaria = contaBancaria;
     }
 
     public double getSaldo() {

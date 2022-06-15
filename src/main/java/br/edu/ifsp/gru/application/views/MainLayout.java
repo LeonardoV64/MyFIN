@@ -1,9 +1,10 @@
 package br.edu.ifsp.gru.application.views;
 
 import br.edu.ifsp.gru.application.security.SecurityService;
-import br.edu.ifsp.gru.application.views.list.ListView;
-import br.edu.ifsp.gru.application.views.list.DashBoardView;
-import br.edu.ifsp.gru.application.views.list.DespesasView;
+import br.edu.ifsp.gru.application.views.list.ContaBancariaView;
+import br.edu.ifsp.gru.application.views.list.ContaBancariaDashboardView;
+import br.edu.ifsp.gru.application.views.list.DespesaView;
+import br.edu.ifsp.gru.application.views.list.ReceitaView;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.button.Button;
@@ -46,17 +47,17 @@ public class MainLayout extends AppLayout {
 	
 	private void createDrawer() {
 		
-		RouterLink listView	=	new RouterLink("Contas Bancárias", ListView.class);
+		RouterLink listView	=	new RouterLink("Contas Bancárias", ContaBancariaView.class);
 		
-		RouterLink DespesasView	=	new RouterLink("Despesas", DespesasView.class);
+		RouterLink DespesasView	=	new RouterLink("Despesas", DespesaView.class);
 		
-		RouterLink ReceitasView	=	new RouterLink("Receitas", br.edu.ifsp.gru.application.views.list.ReceitasView.class);
+		RouterLink ReceitasView	=	new RouterLink("Receitas", ReceitaView.class);
 		
 		listView.setHighlightCondition(HighlightConditions.sameLocation());
 		
 		addToDrawer(new VerticalLayout(
 				listView,
-				new RouterLink("Dashboard", DashBoardView.class),
+				new RouterLink("Dashboard", ContaBancariaDashboardView.class),
 				DespesasView,
 				ReceitasView
 				));

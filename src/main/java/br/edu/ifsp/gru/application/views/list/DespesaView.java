@@ -11,14 +11,14 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
 
-@Route(value = "despesas", layout = MainLayout.class)
+@Route(value = "despesa", layout = MainLayout.class)
 @PageTitle("Despesas Mensais")
 @PermitAll
-public class DespesasView extends VerticalLayout{
+public class DespesaView extends VerticalLayout{
 	private CrmService service;
 	
 	
-	public DespesasView(CrmService service) {
+	public DespesaView(CrmService service) {
 		this.service = service;
 		addClassName("despesas-view");
 		GradientColor color = GradientColor.createLinear(0, 0, 0, 1);

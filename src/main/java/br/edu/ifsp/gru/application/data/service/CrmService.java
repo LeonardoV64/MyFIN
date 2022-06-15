@@ -1,9 +1,9 @@
 package br.edu.ifsp.gru.application.data.service;
 
-import br.edu.ifsp.gru.application.data.entity.Contas;
-import br.edu.ifsp.gru.application.data.entity.Tipo;
-import br.edu.ifsp.gru.application.data.repository.ContasRepository;
-import br.edu.ifsp.gru.application.data.repository.TipoRepository;
+import br.edu.ifsp.gru.application.data.entity.ContaBancaria;
+import br.edu.ifsp.gru.application.data.entity.TipoConta;
+import br.edu.ifsp.gru.application.data.repository.ContaBancariaRepository;
+import br.edu.ifsp.gru.application.data.repository.TipoContaRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,48 +11,52 @@ import java.util.List;
 @Service
 public class CrmService {
 
-    private final ContasRepository contasRepository;
-    private final TipoRepository tipoRepository;
+    private final ContaBancariaRepository contaBancariaRepository;
+    private final TipoContaRepository tipoContaRepository;
 
-    public CrmService(ContasRepository contasRepository,
-                      TipoRepository tipoRepository) {
+    //Cria uma conexão com os repositories de contas bancárias e tipos de contas
+    public CrmService(ContaBancariaRepository contaBancariaRepository,
+                      TipoContaRepository tipoContaRepository) {
 
-        this.contasRepository = contasRepository;
-        this.tipoRepository = tipoRepository;
+        this.contaBancariaRepository = contaBancariaRepository;
+        this.tipoContaRepository = tipoContaRepository;
     }
 
-    public List<Contas> buscaTodasContas(String filterText){
+    //Retorna uma lista com todas as contas cadastradas pelo usuário
+    public List<ContaBancaria> buscaTodasContasBancarias(String filterText){
         if(filterText == null || filterText.isEmpty()){
-            return contasRepository.findAll();
+            return contaBancariaRepository.findAll();
         } else {
-            return contasRepository.busca(filterText);
+            return contaBancariaRepository.busca(filterText);
         }
     }
 
     public long countContas(){
-        return contasRepository.count();
+        return contaBancariaRepository.count();
     }
 
-    public void deletarConta(Contas conta){
-        contasRepository.delete(conta);
+    public void deletarConta(ContaBancaria conta){
+        contaBancariaRepository.delete(conta);
     }
-    
+
+    //Função que soma todos os saldos de todas as contas cadastradas pelo usuário
     public double somaSaldo() {
     	
-    	return contasRepository.soma();
+    	return contaBancariaRepository.somaSaldo();
     }
     
-
-    public void salvarConta(Contas conta){
+    //Exception para o cadastro de contas
+    public void salvarConta(ContaBancaria conta){
         if(conta == null){
             System.err.println("Conta retornou null");
             return;
         }
 
-        contasRepository.save(conta);
+        contaBancariaRepository.save(conta);
     }
 
-    public List<Tipo> buscaTodosStatus(){
-        return tipoRepository.findAll();
+    //Retorna todos os tipos de contas cadastradas no banco de dados
+    public List<TipoConta> buscaTodosTipos(){
+        return tipoContaRepository.findAll();
     }
 }
