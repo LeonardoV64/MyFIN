@@ -1,10 +1,7 @@
-package com.example.application.data.entity;
+package br.edu.ifsp.gru.application.data.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
@@ -18,14 +15,14 @@ public class Contas extends AbstractEntity {
 
     @NotNull
     @ManyToOne
-    private Status status;
+    private Tipo tipo;
 
-    public Status getStatus() {
-        return status;
+    public Tipo getStatus() {
+        return tipo;
     }
 
-    public void setStatus(Status status) {
-        this.status = status;
+    public void setStatus(Tipo tipo) {
+        this.tipo = tipo;
     }
 
     public String getConta() {

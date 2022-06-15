@@ -1,4 +1,4 @@
-package com.example.application.security;
+package br.edu.ifsp.gru.application.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,7 +9,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
-import com.example.application.views.LoginView;
+import br.edu.ifsp.gru.application.views.LoginView;
 import com.vaadin.flow.spring.security.VaadinWebSecurityConfigurerAdapter;
 
 @EnableWebSecurity

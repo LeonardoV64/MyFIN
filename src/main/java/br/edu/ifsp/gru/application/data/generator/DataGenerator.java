@@ -1,4 +1,4 @@
-package com.example.application.data.generator;
+package br.edu.ifsp.gru.application.data.generator;
 
 import java.time.LocalDateTime;
 import java.util.Random;
@@ -6,10 +6,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import com.example.application.data.entity.Contas;
-import com.example.application.data.entity.Status;
-import com.example.application.data.repository.ContasRepository;
-import com.example.application.data.repository.StatusRepository;
+import br.edu.ifsp.gru.application.data.entity.Contas;
+import br.edu.ifsp.gru.application.data.entity.Tipo;
+import br.edu.ifsp.gru.application.data.repository.ContasRepository;
+import br.edu.ifsp.gru.application.data.repository.TipoRepository;
 import com.vaadin.exampledata.DataType;
 import com.vaadin.exampledata.ExampleDataGenerator;
 import com.vaadin.flow.spring.annotation.SpringComponent;
@@ -25,7 +25,7 @@ public class DataGenerator {
 
     @Bean
     public CommandLineRunner loadData(ContasRepository contasRepository,
-                                      StatusRepository statusRepository) {
+                                      TipoRepository tipoRepository) {
 
         return args -> {
             Logger logger = LoggerFactory.getLogger(getClass());
@@ -37,9 +37,9 @@ public class DataGenerator {
 
             logger.info("Gerando informações demonstrativas...");
 
-            List<Status> statuses = statusRepository
-                    .saveAll(Stream.of("Ativa", "Inativa")
-                            .map(Status::new).collect(Collectors.toList()));
+            List<Tipo> tipos = tipoRepository
+                    .saveAll(Stream.of("Corrente", "Poupança")
+                            .map(Tipo::new).collect(Collectors.toList()));
 
             logger.info("... gerando 5 Contas aleatorias...");
             ExampleDataGenerator<Contas> contasGenerator = new ExampleDataGenerator<>(Contas.class,
@@ -49,7 +49,7 @@ public class DataGenerator {
 
             Random r = new Random(seed);
             List<Contas> conta = contasGenerator.create(5, seed).stream().peek(contact -> {
-                contact.setStatus(statuses.get(r.nextInt(statuses.size())));
+                contact.setStatus(tipos.get(r.nextInt(tipos.size())));
             }).collect(Collectors.toList());
 
             contasRepository.saveAll(conta);

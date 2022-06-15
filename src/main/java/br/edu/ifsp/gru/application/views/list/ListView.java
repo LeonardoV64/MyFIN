@@ -1,30 +1,20 @@
-package com.example.application.views.list;
+package br.edu.ifsp.gru.application.views.list;
 
-import com.example.application.data.entity.Contas;
-import com.example.application.data.service.CrmService;
-import com.example.application.views.MainLayout;
+import br.edu.ifsp.gru.application.data.entity.Contas;
+import br.edu.ifsp.gru.application.data.service.CrmService;
+import br.edu.ifsp.gru.application.views.MainLayout;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasSize;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.charts.Chart;
-import com.vaadin.flow.component.charts.model.ChartType;
-import com.vaadin.flow.component.charts.model.DataSeries;
-import com.vaadin.flow.component.charts.model.DataSeriesItem;
-import com.vaadin.flow.component.charts.model.style.GradientColor;
-import com.vaadin.flow.component.charts.model.style.SolidColor;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Span;
-import com.vaadin.flow.component.login.LoginI18n.Form;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.server.frontend.TaskRunNpmInstall.Stats;
-
-import java.util.Collections;
 
 import javax.annotation.security.PermitAll;
 
@@ -34,7 +24,7 @@ import javax.annotation.security.PermitAll;
 public class ListView extends VerticalLayout {
     Grid<Contas> grid = new Grid<>(Contas.class);
     TextField filterText = new TextField();
-    ContaForm form;
+    ContasForm form;
     Chart chart;
     private CrmService service;
     
@@ -87,22 +77,22 @@ public class ListView extends VerticalLayout {
     }
 
     private void configureForm() {
-        form = new ContaForm(service.buscaTodosStatus());
+        form = new ContasForm(service.buscaTodosStatus());
         ((HasSize) form).setWidth("25em");
 
-        form.addListener(ContaForm.SalvarEvento.class, this::salvarConta);
-        form.addListener(ContaForm.DeletarEvento.class, this::deletarConta);
-        form.addListener(ContaForm.FecharEvento.class, e -> fecharEditor());
+        form.addListener(ContasForm.SalvarEvento.class, this::salvarConta);
+        form.addListener(ContasForm.DeletarEvento.class, this::deletarConta);
+        form.addListener(ContasForm.FecharEvento.class, e -> fecharEditor());
 
     }
 
-    private void salvarConta(ContaForm.SalvarEvento event) {
+    private void salvarConta(ContasForm.SalvarEvento event) {
     	service.salvarConta(event.getContas());
     	updateList();
     	fecharEditor();
     }
     
-    private void deletarConta(ContaForm.DeletarEvento event) {
+    private void deletarConta(ContasForm.DeletarEvento event) {
     	service.deletarConta(event.getContas());
     	updateList();
     	fecharEditor();

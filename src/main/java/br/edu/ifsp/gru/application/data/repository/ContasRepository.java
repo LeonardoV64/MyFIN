@@ -1,12 +1,11 @@
-package com.example.application.data.repository;
+package br.edu.ifsp.gru.application.data.repository;
 
-import com.example.application.data.entity.Contas;
+import br.edu.ifsp.gru.application.data.entity.Contas;
 
 import java.util.List;
-import java.util.UUID;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
 public interface ContasRepository extends JpaRepository<Contas, Integer> {

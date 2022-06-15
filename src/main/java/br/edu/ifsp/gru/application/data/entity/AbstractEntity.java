@@ -1,4 +1,4 @@
-package com.example.application.data.entity;
+package br.edu.ifsp.gru.application.data.entity;
 
 import java.util.UUID;
 import javax.persistence.GeneratedValue;

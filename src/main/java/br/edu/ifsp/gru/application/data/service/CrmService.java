@@ -1,9 +1,9 @@
-package com.example.application.data.service;
+package br.edu.ifsp.gru.application.data.service;
 
-import com.example.application.data.entity.Contas;
-import com.example.application.data.entity.Status;
-import com.example.application.data.repository.ContasRepository;
-import com.example.application.data.repository.StatusRepository;
+import br.edu.ifsp.gru.application.data.entity.Contas;
+import br.edu.ifsp.gru.application.data.entity.Tipo;
+import br.edu.ifsp.gru.application.data.repository.ContasRepository;
+import br.edu.ifsp.gru.application.data.repository.TipoRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,13 +12,13 @@ import java.util.List;
 public class CrmService {
 
     private final ContasRepository contasRepository;
-    private final StatusRepository statusRepository;
+    private final TipoRepository tipoRepository;
 
     public CrmService(ContasRepository contasRepository,
-                      StatusRepository statusRepository) {
+                      TipoRepository tipoRepository) {
 
         this.contasRepository = contasRepository;
-        this.statusRepository = statusRepository;
+        this.tipoRepository = tipoRepository;
     }
 
     public List<Contas> buscaTodasContas(String filterText){
@@ -52,7 +52,7 @@ public class CrmService {
         contasRepository.save(conta);
     }
 
-    public List<Status> buscaTodosStatus(){
-        return statusRepository.findAll();
+    public List<Tipo> buscaTodosStatus(){
+        return tipoRepository.findAll();
     }
 }

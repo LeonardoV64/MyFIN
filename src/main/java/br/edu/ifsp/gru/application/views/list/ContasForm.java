@@ -1,7 +1,7 @@
-package com.example.application.views.list;
+package br.edu.ifsp.gru.application.views.list;
 
-import com.example.application.data.entity.Contas;
-import com.example.application.data.entity.Status;
+import br.edu.ifsp.gru.application.data.entity.Contas;
+import br.edu.ifsp.gru.application.data.entity.Tipo;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
@@ -20,13 +20,13 @@ import com.vaadin.flow.shared.Registration;
 
 import java.util.List;
 
-public class ContaForm extends FormLayout {
+public class ContasForm extends FormLayout {
     Binder<Contas> binder = new BeanValidationBinder<>(Contas.class);
 
 
     TextField conta = new TextField("Conta");
     NumberField saldo = new NumberField("Saldo");
-    ComboBox<Status> status = new ComboBox<Status>("Status");
+    ComboBox<Tipo> status = new ComboBox<Tipo>("Status");
 
 
 
@@ -35,12 +35,12 @@ public class ContaForm extends FormLayout {
     Button cancelar = new Button("Cancelar");
     private Contas contas;
 
-    public ContaForm(List<Status> statuses){
+    public ContasForm(List<Tipo> tipos){
         addClassName("contact-form");
         binder.bindInstanceFields(this);
 
-        status.setItems(statuses);
-        status.setItemLabelGenerator(Status::getName);
+        status.setItems(tipos);
+        status.setItemLabelGenerator(Tipo::getName);
 
         add(
                 conta,
@@ -80,10 +80,10 @@ public class ContaForm extends FormLayout {
     }
 
     // Eventos
-    public static abstract class ContaFormEvento extends ComponentEvent<ContaForm> {
+    public static abstract class ContaFormEvento extends ComponentEvent<ContasForm> {
         private Contas contas;
 
-        protected ContaFormEvento(ContaForm source, Contas contas) {
+        protected ContaFormEvento(ContasForm source, Contas contas) {
             super(source, false);
             this.contas = contas;
         }
@@ -94,20 +94,20 @@ public class ContaForm extends FormLayout {
     }
 
     public static class SalvarEvento extends ContaFormEvento {
-        SalvarEvento(ContaForm source, Contas contas) {
+        SalvarEvento(ContasForm source, Contas contas) {
             super(source, contas);
         }
     }
 
     public static class DeletarEvento extends ContaFormEvento {
-        DeletarEvento(ContaForm source, Contas contas) {
+        DeletarEvento(ContasForm source, Contas contas) {
             super(source, contas);
         }
 
     }
 
     public static class FecharEvento extends ContaFormEvento {
-        FecharEvento(ContaForm source) {
+        FecharEvento(ContasForm source) {
             super(source, null);
         }
     }

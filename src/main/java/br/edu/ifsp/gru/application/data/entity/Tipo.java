@@ -1,16 +1,16 @@
-package com.example.application.data.entity;
+package br.edu.ifsp.gru.application.data.entity;
 
 import javax.persistence.Entity;
 
 @Entity
-public class Status extends AbstractEntity {
+public class Tipo extends AbstractEntity {
     private String name;
 
-    public Status() {
+    public Tipo() {
 
     }
 
-    public Status(String name) {
+    public Tipo(String name) {
         this.name = name;
     }
 
