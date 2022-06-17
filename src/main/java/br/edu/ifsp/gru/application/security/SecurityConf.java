@@ -1,4 +1,4 @@
-package com.example.application.security;
+package br.edu.ifsp.gru.application.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,7 +9,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
-import com.example.application.views.LoginView;
+import br.edu.ifsp.gru.application.views.LoginView;
 import com.vaadin.flow.spring.security.VaadinWebSecurityConfigurerAdapter;
 
 @EnableWebSecurity
@@ -33,8 +33,13 @@ public class SecurityConf extends VaadinWebSecurityConfigurerAdapter {
 	@Bean
 	@Override
 	protected UserDetailsService userDetailsService() {
+<<<<<<< HEAD:src/main/java/com/example/application/security/SecurityConf.java
 		return new InMemoryUserDetailsManager(User.withUsername("user")
 				.password("{noop}123")
+=======
+		return new InMemoryUserDetailsManager(User.withUsername("usuario")
+				.password("{noop}senha")
+>>>>>>> baf4f2245e3c5ab5f9816e97b5d73e304a47ad79:src/main/java/br/edu/ifsp/gru/application/security/SecurityConf.java
 				.roles("USER")
 				.build());
 	}

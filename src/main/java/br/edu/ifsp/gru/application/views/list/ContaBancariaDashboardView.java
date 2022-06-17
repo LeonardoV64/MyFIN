@@ -1,9 +1,9 @@
-package com.example.application.views.list;
+package br.edu.ifsp.gru.application.views.list;
 
 import javax.annotation.security.PermitAll;
 
-import com.example.application.data.service.CrmService;
-import com.example.application.views.MainLayout;
+import br.edu.ifsp.gru.application.views.MainLayout;
+import br.edu.ifsp.gru.application.data.service.CrmService;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.charts.Chart;
 import com.vaadin.flow.component.charts.model.ChartType;
@@ -18,13 +18,13 @@ import com.vaadin.flow.router.Route;
 
 
 @Route(value = "dashboard", layout = MainLayout.class)
-@PageTitle("Gráficos")
+@PageTitle("Dashboard de contas")
 @PermitAll
-public class DashBoardView extends VerticalLayout{
+public class ContaBancariaDashboardView extends VerticalLayout{
 	private CrmService service;
 	
-	
-	public DashBoardView(CrmService service) {
+	//Desenha a view de dashboard de contas
+	public ContaBancariaDashboardView(CrmService service) {
 		this.service = service;
 		addClassName("dashboard-view");
 		GradientColor color = GradientColor.createLinear(0, 0, 0, 1);
@@ -32,21 +32,21 @@ public class DashBoardView extends VerticalLayout{
 		setDefaultHorizontalComponentAlignment(Alignment.CENTER);
 		add(getContaStats(), getContasSaldoChart());
 	}
-	
+
+	//Retorna o valor da soma de todos os saldos no topo, acima da caixa de busca
 	private Component getContaStats() {
-		Span stats = new Span("Saldo Total " + service.somaSaldo());
+		Span stats = new Span("Saldo Total R$ " + service.somaSaldo());
 		stats.addClassNames("text-xl", "mt-m");
 		return stats;
 	}
 
-
-
+	//Cria um gráfico de pizza baseado em todos os valores de saldo de contas bancárias que o usuário cadastrou
 	private Component getContasSaldoChart() {
 		Chart chart = new Chart(ChartType.PIE);
 		
 		
 		DataSeries dataSeries = new DataSeries();
-		service.buscaTodasContas(null).forEach(conta->{
+		service.buscaTodasContasBancarias(null).forEach(conta->{
 			dataSeries.add(new DataSeriesItem(conta.getConta(), conta.getSaldo()));
 			});
 		chart.getConfiguration().setSeries(dataSeries);

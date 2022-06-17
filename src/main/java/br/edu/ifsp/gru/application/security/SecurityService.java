@@ -1,4 +1,4 @@
-package com.example.application.security;
+package br.edu.ifsp.gru.application.security;
 
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Component;
