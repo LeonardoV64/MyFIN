@@ -1,10 +1,13 @@
 package com.example.application.views.list;
 
 import com.example.application.data.entity.Contas;
+import com.example.application.data.repository.ContasRepository;
 import com.example.application.data.service.CrmService;
 import com.example.application.views.MainLayout;
+import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasSize;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.charts.Chart;
 import com.vaadin.flow.component.charts.model.ChartType;
@@ -13,6 +16,7 @@ import com.vaadin.flow.component.charts.model.DataSeriesItem;
 import com.vaadin.flow.component.charts.model.style.GradientColor;
 import com.vaadin.flow.component.charts.model.style.SolidColor;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.login.LoginI18n.Form;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -22,11 +26,15 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.component.AttachEvent;
+import com.vaadin.flow.component.DetachEvent;
 import com.vaadin.flow.server.frontend.TaskRunNpmInstall.Stats;
 
 import java.util.Collections;
 
 import javax.annotation.security.PermitAll;
+
+import org.springframework.beans.factory.DisposableBean;
 
 @Route(value = "", layout = MainLayout.class)
 @PageTitle("Contas Correntes")
@@ -36,19 +44,22 @@ public class ListView extends VerticalLayout {
     TextField filterText = new TextField();
     ContaForm form;
     Chart chart;
+    Span stats = new Span();
     private CrmService service;
     
 
 
     public ListView(CrmService service) {
         this.service = service;
+        var header = new H2();
         addClassName("list-view");
         setSizeFull();
+        
 
         configureGrid();
         configureForm();
         
-        getContaStats();
+        header.add(getContaStats());
         
 
         add(
@@ -65,8 +76,7 @@ public class ListView extends VerticalLayout {
     }
     
 
-	private void fecharEditor() {
-    	
+	private void fecharEditor() {  	
     	form.setConta(null);
     	form.setVisible(false);
     	removeClassName("editing");
@@ -100,6 +110,7 @@ public class ListView extends VerticalLayout {
     	service.salvarConta(event.getContas());
     	updateList();
     	fecharEditor();
+    	UI.getCurrent().getPage().reload();
     }
     
     private void deletarConta(ContaForm.DeletarEvento event) {
@@ -142,6 +153,7 @@ public class ListView extends VerticalLayout {
 
         Button addContaButton = new Button("Criar Conta");
         addContaButton.addClickListener(e -> adicionarConta());
+        
 
         HorizontalLayout toolbar = new HorizontalLayout(filterText, addContaButton);
         toolbar.addClassName("toolbar");
@@ -157,9 +169,10 @@ public class ListView extends VerticalLayout {
 	private Component getContaStats() {
 		Span stats = new Span("Saldo Total " + service.somaSaldo());
 		stats.addClassNames("text-xl", "mt-m");
-		setDefaultHorizontalComponentAlignment(Alignment.CENTER);
+		setDefaultHorizontalComponentAlignment(Alignment.START);
 		return stats;
 	}
+	
 
 
 
